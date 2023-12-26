@@ -245,26 +245,29 @@ unsigned int convertDateTimeTZToUnixTimestamp(TDateTimeTZ datetimetz) {
     timestamp = timestamp + nr_ani_bisecti * DAYS_IN_A_LEAP_YEAR * SEC_IN_A_DAY;
 	timestamp = timestamp + (datetimetz.date.year - START_YEAR - nr_ani_bisecti) * DAYS_IN_A_YEAR * SEC_IN_A_DAY;
 
+	int diferenta_tz = datetimetz.tz->utc_hour_difference * SEC_IN_AN_HOUR;
+	timestamp = timestamp - diferenta_tz;
+
 	return timestamp;
 }
 
 // Task 6
 void printDateTimeTZ(TDateTimeTZ datetimetz) {
-	char luni[13][11];
-	strcpy(luni[1], "ianuarie");
-	strcpy(luni[2], "februarie");
-	strcpy(luni[3], "martie");
-	strcpy(luni[4], "aprilie");
-    strcpy(luni[5], "mai");
-	strcpy(luni[6], "iunie");
-	strcpy(luni[7], "iulie");
-	strcpy(luni[8], "august");
-	strcpy(luni[9], "septembrie");
-	strcpy(luni[10], "octombrie");
-	strcpy(luni[11], "noiembrie");
-	strcpy(luni[12], "decembrie");
+	char luna[13][11];
+	strcpy(luna[1], "ianuarie");
+	strcpy(luna[2], "februarie");
+	strcpy(luna[3], "martie");
+	strcpy(luna[4], "aprilie");
+    strcpy(luna[5], "mai");
+	strcpy(luna[6], "iunie");
+	strcpy(luna[7], "iulie");
+	strcpy(luna[8], "august");
+	strcpy(luna[9], "septembrie");
+	strcpy(luna[10], "octombrie");
+	strcpy(luna[11], "noiembrie");
+	strcpy(luna[12], "decembrie");
 
-	printf("%hhu %s %u, ", datetimetz.date.day, luni[datetimetz.date.month], datetimetz.date.year);
+	printf("%hhu %s %u, ", datetimetz.date.day, luna[datetimetz.date.month], datetimetz.date.year);
 	printf("%02hhu:%02hhu:%02hhu ", datetimetz.time.hour, datetimetz.time.min, datetimetz.time.sec);
 	printf("%s (UTC%+d)\n", datetimetz.tz->name, datetimetz.tz->utc_hour_difference);
 }

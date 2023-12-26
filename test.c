@@ -64,10 +64,12 @@ int main () {
     printf("Task 5: ");
     unsigned int ts = convertDateTimeTZToUnixTimestamp(d);
     printf("%u\n", ts);
+    TDateTimeTZ e = convertUnixTimestampToDateTimeTZ(ts, tz, 12);
 
     //test task 6
     printf("Task 6: \n");
     printDateTimeTZ(d);
+    printDateTimeTZ(e);
 
     return 0;
 }
