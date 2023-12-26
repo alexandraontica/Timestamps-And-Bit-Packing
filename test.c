@@ -61,7 +61,9 @@ int main () {
     printf("\n");
     
     // test task 5
-
+    printf("Task 5: ");
+    unsigned int ts = convertDateTimeTZToUnixTimestamp(d);
+    printf("%u\n", ts);
 
     //test task 6
     printf("Task 6: \n");

@@ -27,6 +27,8 @@
 #define FINAL_LUNA_31 31
 #define FINAL_FEB 28
 #define FINAL_FEB_AN_BISECT 29
+#define DAYS_IN_A_YEAR 365
+#define DAYS_IN_A_LEAP_YEAR 366
 
 // Task 1
 TTime convertUnixTimestampToTime(unsigned int timestamp) {
@@ -200,10 +202,51 @@ TDateTimeTZ convertUnixTimestampToDateTimeTZ(unsigned int timestamp, TTimezone *
 	return result;
 }
 
-// // Task 5
-// unsigned int convertDateTimeTZToUnixTimestamp(TDateTimeTZ) {
-// 	return 0;
-// }
+// Task 5
+unsigned int convertDateTimeTZToUnixTimestamp(TDateTimeTZ datetimetz) {
+    unsigned int timestamp = datetimetz.time.sec + datetimetz.time.min * SEC_IN_A_MIN
+	+ datetimetz.time.hour * SEC_IN_AN_HOUR + (datetimetz.date.day - 1) * SEC_IN_A_DAY;
+
+	int nr_ani_bisecti = 0, este_an_bisect = 0;
+
+	for (int i = START_YEAR; i < datetimetz.date.year; i++) {
+		if ((i % 400 == 0) || (i % 4 == 0 && i % 100 != 0)) {
+			nr_ani_bisecti++;
+		}
+	}
+
+	if (datetimetz.date.month >= FEBRUARIE) {
+		if ((datetimetz.date.year % 400 == 0) || (datetimetz.date.year % 4 == 0 && datetimetz.date.year % 100 != 0)) {
+			este_an_bisect = 1;
+		}
+	}
+
+	for (int i = IANUARIE; i <= DECEMBRIE; i++) {
+		if (datetimetz.date.month > i) {
+			if (i == IANUARIE || i == MARTIE || i == MAI || i == IULIE || i == AUGUST || i== OCTOMBRIE ||
+			i == DECEMBRIE) {
+				timestamp = timestamp + FINAL_LUNA_31 * SEC_IN_A_DAY;
+			} else if (i == FEBRUARIE) {
+				if (este_an_bisect == 1) {
+					timestamp = timestamp + FINAL_FEB_AN_BISECT * SEC_IN_A_DAY;
+				} else {
+					timestamp = timestamp + FINAL_FEB * SEC_IN_A_DAY;
+				}
+			} else if (i == APRILIE || i == IUNIE || i == SEPTEMBRIE || i == NOIEMBRIE) {
+				timestamp = timestamp + FINAL_LUNA_30 * SEC_IN_A_DAY;
+			}
+		}
+
+		if (datetimetz.date.month == i) {
+			break;
+		}
+	}
+
+    timestamp = timestamp + nr_ani_bisecti * DAYS_IN_A_LEAP_YEAR * SEC_IN_A_DAY;
+	timestamp = timestamp + (datetimetz.date.year - START_YEAR - nr_ani_bisecti) * DAYS_IN_A_YEAR * SEC_IN_A_DAY;
+
+	return timestamp;
+}
 
 // Task 6
 void printDateTimeTZ(TDateTimeTZ datetimetz) {
