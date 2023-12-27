@@ -8,21 +8,8 @@
 #define SEC_IN_AN_HOUR 3600
 #define SEC_IN_A_DAY 86400
 #define HOURS_IN_A_DAY 24
-#define START_YEAR 1970
 #define START_MONTH 1
 #define START_DAY 1
-#define IANUARIE 1
-#define FEBRUARIE 2
-#define MARTIE 3
-#define APRILIE 4
-#define MAI 5
-#define IUNIE 6
-#define IULIE 7
-#define AUGUST 8
-#define SEPTEMBRIE 9
-#define OCTOMBRIE 10
-#define NOIEMBRIE 11
-#define DECEMBRIE 12
 #define FINAL_LUNA_30 30
 #define FINAL_LUNA_31 31
 #define FINAL_FEB 28
@@ -250,19 +237,19 @@ unsigned int convertDateTimeTZToUnixTimestamp(TDateTimeTZ datetimetz) {
 
 // Task 6
 void printDateTimeTZ(TDateTimeTZ datetimetz) {
-	char luna[13][11];
-	strcpy(luna[1], "ianuarie");
-	strcpy(luna[2], "februarie");
-	strcpy(luna[3], "martie");
-	strcpy(luna[4], "aprilie");
-    strcpy(luna[5], "mai");
-	strcpy(luna[6], "iunie");
-	strcpy(luna[7], "iulie");
-	strcpy(luna[8], "august");
-	strcpy(luna[9], "septembrie");
-	strcpy(luna[10], "octombrie");
-	strcpy(luna[11], "noiembrie");
-	strcpy(luna[12], "decembrie");
+	char luna[MONTHS_IN_A_YEAR + 1][MAX_LITERE_IN_LUNA + 1];
+	strcpy(luna[IANUARIE], "ianuarie");
+	strcpy(luna[FEBRUARIE], "februarie");
+	strcpy(luna[MARTIE], "martie");
+	strcpy(luna[APRILIE], "aprilie");
+    strcpy(luna[MAI], "mai");
+	strcpy(luna[IUNIE], "iunie");
+	strcpy(luna[IULIE], "iulie");
+	strcpy(luna[AUGUST], "august");
+	strcpy(luna[SEPTEMBRIE], "septembrie");
+	strcpy(luna[OCTOMBRIE], "octombrie");
+	strcpy(luna[NOIEMBRIE], "noiembrie");
+	strcpy(luna[DECEMBRIE], "decembrie");
 
 	printf("%hhu %s %u, ", datetimetz.date.day, luna[datetimetz.date.month], datetimetz.date.year);
 	printf("%02hhu:%02hhu:%02hhu ", datetimetz.time.hour, datetimetz.time.min, datetimetz.time.sec);
