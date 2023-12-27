@@ -28,3 +28,6 @@ Mi-am creat un vector de siruri de caractere cu toate lunile anului ca sa-mi fie
 afisarea in formatul cerut.
 
 Task 7:
+Pentru a extrage ziua, luna si anul din fiecare data citita in formatul cerut m-am folosit de niste masti care aveau bitii de 1 pe 
+pozitiile pe care in numar/data se afla ce cautam (ziua/luna/anul). Am salvat datele intr-un vector de tip TDate pe care l-am sortat si 
+afisat.

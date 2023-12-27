@@ -17,7 +17,7 @@ int main () {
 	int task = 0;
     scanf("%d", &task);
 
-    char luna[MONTHS_IN_A_YEAR + 1][MAX_LITERE_IN_LUNA + 1];
+    char luna[MONTHS_IN_A_YEAR + 1][MAX_LITERE_IN_LUNA + 1];  // creat pentru a afisa mai usor numele lunii
 	strcpy(luna[IANUARIE], "ianuarie");
 	strcpy(luna[FEBRUARIE], "februarie");
 	strcpy(luna[MARTIE], "martie");
@@ -42,20 +42,21 @@ int main () {
 
         TDate data[N];
         for (i = 0; i < N; i++) {
-            unsigned int mask_zi = BINAR_11111;
-            unsigned int zi = data_biti[i] & mask_zi;
+            unsigned int mask_zi = BINAR_11111;  // bitii de 1 sunt pe poz coresp zilei
+            unsigned int zi = data_biti[i] & mask_zi;  // raman doar bitii ce contin ziua
             data[i].day = (unsigned char)zi;
 
             unsigned int mask_luna = BINAR_1111;
-            mask_luna <<= BITI_ZI;
-            unsigned int luna = (data_biti[i] & mask_luna) >> BITI_ZI;
+            mask_luna <<= BITI_ZI;  // ajung cu bitii de 1 pe poz coresp lunii
+            unsigned int luna = (data_biti[i] & mask_luna) >> BITI_ZI;  // raman doar bitii ce contin luna
             data[i].month = (unsigned char)luna;
 
             unsigned int mask_an = BINAR_111111;
-            mask_an <<= (BITI_LUNA + BITI_ZI);
-            data[i].year = START_YEAR + ((data_biti[i] & mask_an) >> (BITI_LUNA + BITI_ZI));
+            mask_an <<= (BITI_LUNA + BITI_ZI);  // ajung cu bitii de 1 pe poz coresp anului
+            data[i].year = START_YEAR + ((data_biti[i] & mask_an) >> (BITI_LUNA + BITI_ZI));  // bitii ce contin anul
         }
 
+        // sortez datele crescator:
         for (i = 0; i < N - 1; i++) {
             for (j = i + 1; j < N; j++) {
                 if (data[i].year > data[j].year) {
@@ -79,7 +80,7 @@ int main () {
         }
 
         for (i = 0; i < N; i++) {
-            printf("%hhu %s %u\n", data[i]. day, luna[data[i].month], data[i].year);
+            printf("%hhu %s %u\n", data[i].day, luna[data[i].month], data[i].year);
         }
 
     } else if (task == TASK_8) {
