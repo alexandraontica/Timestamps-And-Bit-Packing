@@ -3,19 +3,26 @@
 Task 1:  DE FACUT LA FINAL: VEZI CE MAI MODIFICI AICI, SUNA CAM CIUDAT!!!
 Prin operatiile modulo elimin pentru fiecare variabila in parte unitatile de timp mai mari decat aceasta.
 Mai exact, pentru secunde imi ramane un numar din intervalul [0, 59]; elimin, asadar, minutele, orele etc. din total.
-Pentru minute, imi ramane un numar de secunde din intervalul [0, 3599]; elimin , deci, orele, zilele etc. din total. Rezultatul il impart
-la numarul de secunde dintr-un minut pentru a calcula cate minute am.
+Pentru minute, imi ramane un numar de secunde din intervalul [0, 3599]; elimin , deci, orele, zilele etc. din total. Rezultatul il 
+impart la numarul de secunde dintr-un minut pentru a calcula cate minute am.
 La fel, pentru numarul de ore elimin zilele din total si impart la numarul de secunde dintr-o ora.
 
-Taskurile 2 si 3: (singura diferenta dintre ele este daca iau sau nu anii bisecti in considerare; explicatii in comentarii)
+Taskurile 2 si 3:
 Am parcurs "din zi in zi" intervalul de timp de la 1.1.1970 pana la momentul indicat de timestamp. Odata cu trecerea fiecarei zile am 
 modificat data, verificand daca se ajunge la finalul unei luni sau a anului curent.
 
 Task 4:
-
+Am salvat in variabila result data si ora in UTC (folosindu-ma de functiile de la taskurile 3 si 1) si fusul orar in care trebuie sa
+convertesc. Am tratat cazurile in care se trece la ziua urmatoare/precedenta separat, luand in considerare si cazurile in care se 
+trece si la alta luna/alt an, modificand apoi si ora (+/- nr. ore diferenta fata de UTC, +/- 24 de ore dupa caz la trecerea in alta
+zi).
 
 Task 5:
-
+Am adaugat la timestamp numarul de secude si echivalentul in secunde al numarului de minute, ore si zile complete. Apoi am adaugat
+echivalentul in secunde al numarului de zile din lunile complete (tinand cont si de tipul anului - bisect sau nu). Pentru ani am
+calculat cati ani bisecti au fost din 1970 pana la anul datei primite ca parametru. Am adaugat apoi la timestamp echivalentul in
+secunde al anilor bisecti completi si al anilor "nebisecti" completi.
 
 Task 6:
-
+Mi-am creat un vector de siruri de caractere cu toate lunile anului ca sa-mi fie mai usor sa afisez numele lunii, apoi am facut 
+afisarea in formatul cerut.

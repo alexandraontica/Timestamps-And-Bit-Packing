@@ -3,9 +3,8 @@
 #include <stdlib.h>
 #include "timelib.h"
 
-int main()
-{
-    // TODO Task 7 & 8
+int main () {
+    // Task 7 & 8
 	
 	
     return 0;

@@ -60,6 +60,7 @@ TDate convertUnixTimestampToDateWithoutLeapYears(unsigned int timestamp) {
 		&& result.day == FINAL_LUNA_30)) {  // sau e final de luna cu 30 zile
             result.month++;
 			result.day = 1;
+			// am scris asa conditia din if pt ca altfel am eroare de coding style (>120 caractere/rand)
 
 		} else {
 			result.day++;
@@ -114,8 +115,8 @@ TDateTimeTZ convertUnixTimestampToDateTimeTZ(unsigned int timestamp, TTimezone *
     result.tz = &timezones[timezone_index];
     result.date = convertUnixTimestampToDate(timestamp);
 	result.time = convertUnixTimestampToTime(timestamp);
-    // result.time.hour = result.time.hour + result.tz->utc_hour_difference;
-	if (result.time.hour + result.tz->utc_hour_difference >= HOURS_IN_A_DAY) {  
+
+	if (result.time.hour + result.tz->utc_hour_difference >= HOURS_IN_A_DAY) {
 		// conditia pusa nu este adevarata decat daca result.tz->utc_hour_difference > 0
 
 		// se trece la ziua urmatoare
@@ -235,10 +236,6 @@ unsigned int convertDateTimeTZToUnixTimestamp(TDateTimeTZ datetimetz) {
 			} else if (i == APRILIE || i == IUNIE || i == SEPTEMBRIE || i == NOIEMBRIE) {
 				timestamp = timestamp + FINAL_LUNA_30 * SEC_IN_A_DAY;
 			}
-		}
-
-		if (datetimetz.date.month == i) {
-			break;
 		}
 	}
 
