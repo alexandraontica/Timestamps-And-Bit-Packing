@@ -208,9 +208,9 @@ unsigned int convertDateTimeTZToUnixTimestamp(TDateTimeTZ datetimetz) {
     unsigned int timestamp = datetimetz.time.sec + datetimetz.time.min * SEC_IN_A_MIN
 	+ datetimetz.time.hour * SEC_IN_AN_HOUR + (datetimetz.date.day - 1) * SEC_IN_A_DAY;
 
-	int nr_ani_bisecti = 0, este_an_bisect = 0;
+	int nr_ani_bisecti = 0, este_an_bisect = 0, i = 0;
 
-	for (int i = START_YEAR; i < datetimetz.date.year; i++) {
+	for (i = START_YEAR; i < datetimetz.date.year; i++) {
 		if ((i % 400 == 0) || (i % 4 == 0 && i % 100 != 0)) {
 			nr_ani_bisecti++;
 		}
@@ -222,7 +222,7 @@ unsigned int convertDateTimeTZToUnixTimestamp(TDateTimeTZ datetimetz) {
 		}
 	}
 
-	for (int i = IANUARIE; i <= DECEMBRIE; i++) {
+	for (i = IANUARIE; i <= DECEMBRIE; i++) {
 		if (datetimetz.date.month > i) {
 			if (i == IANUARIE || i == MARTIE || i == MAI || i == IULIE || i == AUGUST || i== OCTOMBRIE ||
 			i == DECEMBRIE) {
