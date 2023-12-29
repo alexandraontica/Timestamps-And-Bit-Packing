@@ -9,11 +9,26 @@
 #define BINAR_11111 31
 #define BINAR_1111 15
 #define BINAR_111111 63
-#define BINAR_111111111111111 32767  // sunt 15 de 1 (masca pt data)
+#define BINAR_111111111111111 32767  // 15 de 1 (masca pt data)
 #define BITI_ZI 5
 #define BITI_LUNA 4
 #define BITI_DATA 15
 #define BITI_UNSIGNED_INT 32
+
+void extrage_data (unsigned int data_biti, TDate *data, unsigned int i) {
+    unsigned int mask_zi = BINAR_11111;  // bitii de 1 sunt pe poz coresp zilei
+    unsigned int zi = data_biti & mask_zi;  // raman doar bitii ce contin ziua
+    data[i].day = (unsigned char)zi;
+
+    unsigned int mask_luna = BINAR_1111;
+    mask_luna <<= BITI_ZI;  // ajung cu bitii de 1 pe poz coresp lunii
+    unsigned int luna = (data_biti & mask_luna) >> BITI_ZI;  // raman doar bitii ce contin luna
+    data[i].month = (unsigned char)luna;
+
+    unsigned int mask_an = BINAR_111111;
+    mask_an <<= (BITI_LUNA + BITI_ZI);  // ajung cu bitii de 1 pe poz coresp anului
+    data[i].year = START_YEAR + ((data_biti & mask_an) >> (BITI_LUNA + BITI_ZI));  // bitii ce contin anul
+}
 
 void sortare_date (int N, TDate *data) {
     int i = 0, j = 0;
@@ -55,6 +70,7 @@ int main () {
     scanf("%d", &task);
 
     char luna[MONTHS_IN_A_YEAR + 1][MAX_LITERE_IN_LUNA + 1];  // creat pentru a afisa mai usor numele lunii
+    strcpy(luna[0], "\0");  // rezolvare eroare de memorie neinitializata (valgrind) 
 	strcpy(luna[IANUARIE], "ianuarie");
 	strcpy(luna[FEBRUARIE], "februarie");
 	strcpy(luna[MARTIE], "martie");
@@ -93,18 +109,7 @@ int main () {
         }
 
         for (i = 0; i < N; i++) {
-            unsigned int mask_zi = BINAR_11111;  // bitii de 1 sunt pe poz coresp zilei
-            unsigned int zi = data_biti[i] & mask_zi;  // raman doar bitii ce contin ziua
-            data[i].day = (unsigned char)zi;
-
-            unsigned int mask_luna = BINAR_1111;
-            mask_luna <<= BITI_ZI;  // ajung cu bitii de 1 pe poz coresp lunii
-            unsigned int luna = (data_biti[i] & mask_luna) >> BITI_ZI;  // raman doar bitii ce contin luna
-            data[i].month = (unsigned char)luna;
-
-            unsigned int mask_an = BINAR_111111;
-            mask_an <<= (BITI_LUNA + BITI_ZI);  // ajung cu bitii de 1 pe poz coresp anului
-            data[i].year = START_YEAR + ((data_biti[i] & mask_an) >> (BITI_LUNA + BITI_ZI));  // bitii ce contin anul
+            extrage_data(data_biti[i], data, i);
         }
 
         sortare_date(N, data);
@@ -177,23 +182,12 @@ int main () {
         }
 
         for (i = 0; i < inturi_necesare; i++) {
-            unsigned int biti_neprelucrati = BITI_UNSIGNED_INT;
+            unsigned int biti_neprelucrati = BITI_UNSIGNED_INT - nr_biti_data_anterioara;
 
             while (biti_neprelucrati >= BITI_DATA) {
                 data_extrasa = (inturi[i] >> nr_biti_data_anterioara) & mask_data;
 
-                unsigned int mask_zi = BINAR_11111;  // bitii de 1 sunt pe poz coresp zilei
-                unsigned int zi = data_extrasa & mask_zi;  // raman doar bitii ce contin ziua
-                data[j].day = (unsigned char)zi;
-
-                unsigned int mask_luna = BINAR_1111;
-                mask_luna <<= BITI_ZI;  // ajung cu bitii de 1 pe poz coresp lunii
-                unsigned int luna = (data_extrasa & mask_luna) >> BITI_ZI;  // raman doar bitii ce contin luna
-                data[j].month = (unsigned char)luna;
-
-                unsigned int mask_an = BINAR_111111;
-                mask_an <<= (BITI_LUNA + BITI_ZI);  // ajung cu bitii de 1 pe poz coresp anului
-                data[j].year = START_YEAR + ((data_extrasa & mask_an) >> (BITI_LUNA + BITI_ZI));  // bitii ce contin anul
+                extrage_data(data_extrasa, data, j);
 
                 biti_neprelucrati -= BITI_DATA;
 
@@ -205,7 +199,8 @@ int main () {
                     data_extrasa >>= 1;
                 }
 
-                j++;
+                if (j < N - 1)    
+                    j++;
             }
 
             nr_biti_data_anterioara = BITI_UNSIGNED_INT - biti_neprelucrati;
@@ -219,18 +214,7 @@ int main () {
 
             data_extrasa = data_incompleta + ((inturi[i + 1] & mask_data_incompleta) << biti_neprelucrati);
 
-            unsigned int mask_zi = BINAR_11111;  // bitii de 1 sunt pe poz coresp zilei
-            unsigned int zi = data_extrasa & mask_zi;  // raman doar bitii ce contin ziua
-            data[j].day = (unsigned char)zi;
-
-            unsigned int mask_luna = BINAR_1111;
-            mask_luna <<= BITI_ZI;  // ajung cu bitii de 1 pe poz coresp lunii
-            unsigned int luna = (data_extrasa & mask_luna) >> BITI_ZI;  // raman doar bitii ce contin luna
-            data[j].month = (unsigned char)luna;
-
-            unsigned int mask_an = BINAR_111111;
-            mask_an <<= (BITI_LUNA + BITI_ZI);  // ajung cu bitii de 1 pe poz coresp anului
-            data[j].year = START_YEAR + ((data_extrasa & mask_an) >> (BITI_LUNA + BITI_ZI));  // bitii ce contin anul
+            extrage_data(data_extrasa, data, j);
 
             while (data_extrasa != 0) {
                 if ((data_extrasa & 1) == 1) {
