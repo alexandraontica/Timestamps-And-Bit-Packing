@@ -3,6 +3,8 @@
 #include <string.h>
 #include "timelib.h"
 
+#define INDEX_UTC 12
+
 int main () {
     unsigned int timestamp;
     printf("timestamp = ");
@@ -26,7 +28,7 @@ int main () {
     // test task 4
     printf("Task 4: \n");
     TTimezone tz[] = {
-    {"IDLW", -12}, // poz 0
+    {"IDLW", -12},  // poz 0
     {"X", -11},
     {"HST", -10},
     {"AKST", -9},
@@ -38,7 +40,7 @@ int main () {
     {"BRT", -3},
     {"GST", -2},
     {"CVT", -1},
-    {"UTC", 0}, // poz 12
+    {"UTC", 0},  // poz 12
     {"CET", 1},
     {"EET", 2},
     {"FET", 3},
@@ -50,7 +52,7 @@ int main () {
     {"JST", 9},
     {"AEST", 10},
     {"SBT", 11},
-    {"FJT", 12} // poz 24
+    {"FJT", 12}  // poz 24
     };
 
     printf("tz_index = ");
@@ -65,7 +67,7 @@ int main () {
     printf("Task 5: ");
     unsigned int ts = convertDateTimeTZToUnixTimestamp(d);
     printf("%u\n", ts);
-    TDateTimeTZ e = convertUnixTimestampToDateTimeTZ(ts, tz, 12);
+    TDateTimeTZ e = convertUnixTimestampToDateTimeTZ(ts, tz, INDEX_UTC);
 
     //test task 6
     printf("Task 6: \n");

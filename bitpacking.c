@@ -70,7 +70,7 @@ int main () {
     scanf("%d", &task);
 
     char luna[MONTHS_IN_A_YEAR + 1][MAX_LITERE_IN_LUNA + 1];  // creat pentru a afisa mai usor numele lunii
-    strcpy(luna[0], "\0");  // rezolvare eroare de memorie neinitializata (valgrind) 
+    strcpy(luna[0], "\0");  // rezolvare eroare - valori neinitializate (valgrind) 
 	strcpy(luna[IANUARIE], "ianuarie");
 	strcpy(luna[FEBRUARIE], "februarie");
 	strcpy(luna[MARTIE], "martie");
@@ -89,6 +89,7 @@ int main () {
         scanf("%d", &N);
 
         unsigned int *data_biti = (unsigned int *)malloc(N * sizeof(unsigned int));
+        // am alocat dinamic ca sa ma asigur ca am suficient spatiu si pentru seturi foarte mari de date
 
         if (data_biti == NULL) {
             printf("Eroare la alocare");
@@ -138,7 +139,7 @@ int main () {
             return 1;
         }
         
-        unsigned int i = 0, j = 0, k = 0;
+        unsigned int i = 0;
 
         for (i = 0; i < inturi_necesare; i++) {
             scanf("%u", &inturi[i]);
@@ -173,8 +174,12 @@ int main () {
         unsigned int mask_data = BINAR_111111111111111;
         unsigned int data_extrasa = 0;
         unsigned int nr_biti_data_anterioara = 0;
+        unsigned int j = 0, k = 0;
 
         unsigned int *biti_1 = (unsigned int *)calloc(N, sizeof(unsigned int));
+        // cu vectorul biti_1 numar cati biti de 1 are fiecare data in scrierea in baza 2
+        // ca sa pot verifica apoi bitii de control
+        // deoarece il folosesc la numarare, imi trebuie fiecare pozitie initializata cu 0 (calloc in loc de malloc)
 
         if (biti_1 == NULL) {
             printf("Eroare la alocare");
@@ -212,7 +217,10 @@ int main () {
                    mask_data_incompleta += putere_2;
             }
 
-            data_extrasa = data_incompleta + ((inturi[i + 1] & mask_data_incompleta) << biti_neprelucrati);
+            if (i < inturi_necesare -1)
+                data_extrasa = data_incompleta + ((inturi[i + 1] & mask_data_incompleta) << biti_neprelucrati);
+            else
+                data_extrasa = data_incompleta;
 
             extrage_data(data_extrasa, data, j);
 
@@ -226,6 +234,8 @@ int main () {
 
             j++;
         }
+
+        // vezi daca ai extras bine datele (in principal prima si ultima)
 
         // verific bitii de control:
         j = 0;
