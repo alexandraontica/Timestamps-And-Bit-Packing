@@ -6,57 +6,43 @@
 
 #define TASK_7 7
 #define TASK_8 8
-#define BINAR_11111 31
-#define BINAR_1111 15
-#define BINAR_111111 63
-#define BINAR_111111111111111 32767  // 15 de 1 (masca pt data)
 #define BITI_ZI 5
 #define BITI_LUNA 4
+#define BITI_AN 6
 #define BITI_DATA 15
 #define BITI_UNSIGNED_INT 32
 
-void extrage_data (unsigned int data_biti, TDate *data, unsigned int i) {
-    unsigned int mask_zi = BINAR_11111;  // bitii de 1 sunt pe poz coresp zilei
+void extrage_data(unsigned int data_biti, TDate *data, unsigned int i) {
+    unsigned int mask_zi = (1 << BITI_ZI) - 1;  // bitii de 1 sunt pe poz coresp zilei
     unsigned int zi = data_biti & mask_zi;  // raman doar bitii ce contin ziua
     data[i].day = (unsigned char)zi;
 
-    unsigned int mask_luna = BINAR_1111;
+    unsigned int mask_luna = (1 << BITI_LUNA) - 1;
     mask_luna <<= BITI_ZI;  // ajung cu bitii de 1 pe poz coresp lunii
     unsigned int luna = (data_biti & mask_luna) >> BITI_ZI;  // raman doar bitii ce contin luna
     data[i].month = (unsigned char)luna;
 
-    unsigned int mask_an = BINAR_111111;
+    unsigned int mask_an = (1 << BITI_AN) - 1;
     mask_an <<= (BITI_LUNA + BITI_ZI);  // ajung cu bitii de 1 pe poz coresp anului
     data[i].year = START_YEAR + ((data_biti & mask_an) >> (BITI_LUNA + BITI_ZI));  // bitii ce contin anul
 }
 
-void sortare_date (int N, TDate *data) {
-    int i = 0, j = 0;
+int comparare_date(const void *a, const void *b) {
+    TDate *data1 = (TDate *)a;
+    TDate *data2 = (TDate *)b;
 
-    for (i = 0; i < N - 1; i++) {
-        for (j = i + 1; j < N; j++) {
-            if (data[i].year > data[j].year) {
-                TDate aux = data[i];
-                data[i] = data[j];
-                data[j] = aux;
-            } else if (data[i].year == data[j].year) {
-                if (data[i].month > data[j].month) {
-                    TDate aux = data[i];
-                    data[i] = data[j];
-                    data[j] = aux;
-                } else if (data[i].month == data[j].month) {
-                    if (data[i].day > data[j].day) {
-                        TDate aux = data[i];
-                        data[i] = data[j];
-                        data[j] = aux;
-                    }
-                }
-            }
-        }
+    if (data1->year != data2->year) {
+        return (int)data1->year - (int)data2->year;
     }
+
+    if (data1->month != data2->month) {
+        return (int)data1->month - (int)data2->month;
+    }
+
+    return (int)data1->day - (int)data2->day;
 }
 
-void afisare_data (int N, TDate *data, char (*luna)[MAX_LITERE_IN_LUNA + 1]) {
+void afisare_date(int N, TDate *data, char (*luna)[MAX_LITERE_IN_LUNA + 1]) {
     int i = 0;
 
     for (i = 0; i < N; i++) {
@@ -64,48 +50,47 @@ void afisare_data (int N, TDate *data, char (*luna)[MAX_LITERE_IN_LUNA + 1]) {
     }
 }
 
-int main () {
-    // Task 7 & 8
-	int task = 0;
+int main() {
+    int task = 0;
     scanf("%d", &task);
 
     char luna[MONTHS_IN_A_YEAR + 1][MAX_LITERE_IN_LUNA + 1];  // creat pentru a afisa mai usor numele lunii
-    strcpy(luna[0], "\0");  // rezolvare eroare - valori neinitializate (valgrind) 
-	strcpy(luna[IANUARIE], "ianuarie");
-	strcpy(luna[FEBRUARIE], "februarie");
-	strcpy(luna[MARTIE], "martie");
-	strcpy(luna[APRILIE], "aprilie");
-    strcpy(luna[MAI], "mai");
-	strcpy(luna[IUNIE], "iunie");
-	strcpy(luna[IULIE], "iulie");
-	strcpy(luna[AUGUST], "august");
-	strcpy(luna[SEPTEMBRIE], "septembrie");
-	strcpy(luna[OCTOMBRIE], "octombrie");
-	strcpy(luna[NOIEMBRIE], "noiembrie");
-	strcpy(luna[DECEMBRIE], "decembrie");
+    snprintf(luna[0], MAX_LITERE_IN_LUNA + 1, "%s", "");
+    snprintf(luna[IANUARIE], MAX_LITERE_IN_LUNA + 1, "%s", "ianuarie");
+    snprintf(luna[FEBRUARIE], MAX_LITERE_IN_LUNA + 1, "%s", "februarie");
+    snprintf(luna[MARTIE], MAX_LITERE_IN_LUNA + 1, "%s", "martie");
+    snprintf(luna[APRILIE], MAX_LITERE_IN_LUNA + 1, "%s", "aprilie");
+    snprintf(luna[MAI], MAX_LITERE_IN_LUNA + 1, "%s", "mai");
+    snprintf(luna[IUNIE], MAX_LITERE_IN_LUNA + 1, "%s", "iunie");
+    snprintf(luna[IULIE], MAX_LITERE_IN_LUNA + 1, "%s", "iulie");
+    snprintf(luna[AUGUST], MAX_LITERE_IN_LUNA + 1, "%s", "august");
+    snprintf(luna[SEPTEMBRIE], MAX_LITERE_IN_LUNA + 1, "%s", "septembrie");
+    snprintf(luna[OCTOMBRIE], MAX_LITERE_IN_LUNA + 1, "%s", "octombrie");
+    snprintf(luna[NOIEMBRIE], MAX_LITERE_IN_LUNA + 1, "%s", "noiembrie");
+    snprintf(luna[DECEMBRIE], MAX_LITERE_IN_LUNA + 1, "%s", "decembrie");
 
     if (task == TASK_7) {
         int N = 0;
         scanf("%d", &N);
 
-        unsigned int *data_biti = (unsigned int *)malloc(N * sizeof(unsigned int));
-        // am alocat dinamic ca sa ma asigur ca am suficient spatiu si pentru seturi foarte mari de date
+        unsigned int *data_biti = (unsigned int *)calloc(N, sizeof(unsigned int));
 
         if (data_biti == NULL) {
             printf("Eroare la alocare");
             return 1;
         }
-        
+
         unsigned int i = 0;
 
         for (i = 0; i < N; i++) {
             scanf("%u", &data_biti[i]);
         }
 
-        TDate *data = (TDate *)malloc(N * sizeof(TDate));
+        TDate *data = (TDate *)calloc(N, sizeof(TDate));
 
         if (data == NULL) {
             printf("Eroare la alocare");
+            free(data_biti);
             return 1;
         }
 
@@ -113,9 +98,8 @@ int main () {
             extrage_data(data_biti[i], data, i);
         }
 
-        sortare_date(N, data);
-
-        afisare_data(N, data, luna);
+        qsort(data, N, sizeof(TDate), comparare_date);
+        afisare_date(N, data, luna);
 
         free(data_biti);
         free(data);
@@ -126,26 +110,26 @@ int main () {
 
         int inturi_necesare = BITI_DATA * N;
         if (inturi_necesare % BITI_UNSIGNED_INT != 0) {
-            inturi_necesare /= BITI_UNSIGNED_INT;
-            inturi_necesare++;
+            inturi_necesare /= BITI_UNSIGNED_INT;  // atatea int-uri sunt ocupate complet
+            inturi_necesare++;  // aici ramane un nr de biti egal cu restul impartirii la 32 (BITI_UNSIGNED_INT)
         } else {
             inturi_necesare /= BITI_UNSIGNED_INT;
         }
 
-        unsigned int *inturi = (unsigned int *)malloc(inturi_necesare * sizeof(unsigned int));
+        unsigned int *inturi = (unsigned int *)calloc(inturi_necesare, sizeof(unsigned int));
 
         if (inturi == NULL) {
             printf("Eroare la alocare");
             return 1;
         }
-        
+
         unsigned int i = 0;
 
         for (i = 0; i < inturi_necesare; i++) {
             scanf("%u", &inturi[i]);
         }
 
-        int inturi_control_necesare = N;
+        int inturi_control_necesare = inturi_necesare;
         if (inturi_control_necesare % BITI_UNSIGNED_INT != 0) {
             inturi_control_necesare /= BITI_UNSIGNED_INT;
             inturi_control_necesare++;
@@ -153,10 +137,11 @@ int main () {
             inturi_control_necesare /= BITI_UNSIGNED_INT;
         }
 
-        unsigned int *inturi_control = (unsigned int *)malloc(inturi_control_necesare * sizeof(unsigned int));
+        unsigned int *inturi_control = (unsigned int *)calloc(inturi_control_necesare, sizeof(unsigned int));
 
         if (inturi_control == NULL) {
             printf("Eroare la alocare");
+            free(inturi);
             return 1;
         }
 
@@ -164,113 +149,124 @@ int main () {
             scanf("%u", &inturi_control[i]);
         }
 
-        TDate *data = (TDate *)malloc(N * sizeof(TDate));
+        TDate *data = (TDate *)calloc(N, sizeof(TDate));
 
         if (data == NULL) {
             printf("Eroare la alocare");
+            free(inturi);
+            free(inturi_control);
             return 1;
         }
 
-        unsigned int mask_data = BINAR_111111111111111;
-        unsigned int data_extrasa = 0;
-        unsigned int nr_biti_data_anterioara = 0;
-        unsigned int j = 0, k = 0;
+        int *corupt = (int *)calloc(N, sizeof(int));
 
-        unsigned int *biti_1 = (unsigned int *)calloc(N, sizeof(unsigned int));
-        // cu vectorul biti_1 numar cati biti de 1 are fiecare data in scrierea in baza 2
-        // ca sa pot verifica apoi bitii de control
-        // deoarece il folosesc la numarare, imi trebuie fiecare pozitie initializata cu 0 (calloc in loc de malloc)
-
-        if (biti_1 == NULL) {
+        if (corupt == NULL) {
             printf("Eroare la alocare");
+            free(inturi);
+            free(inturi_control);
+            free(data);
             return 1;
         }
+
+        unsigned int mask_data = (1 << BITI_DATA) - 1;
+        unsigned int data_extrasa = 0;  // aici salvez toti biti dintr-o data
+        unsigned int nr_biti_data_anterioara = 0;
+        unsigned int j = 0;
+        unsigned int k = 0;  // cu k parcurg vectorul de inturi de control
 
         for (i = 0; i < inturi_necesare; i++) {
-            unsigned int biti_neprelucrati = BITI_UNSIGNED_INT - nr_biti_data_anterioara;
+            unsigned int copie = inturi[i];
+            int biti_1 = 0;
+            int int_corupt = 0;
 
-            while (biti_neprelucrati >= BITI_DATA) {
+            while (copie != 0) {
+                if ((copie & 1) == 1) {
+                    biti_1++;
+                }
+                copie >>= 1;
+            }
+
+            if (biti_1 % 2 != (inturi_control[k] & 1)) {
+                int_corupt = 1;
+            }
+
+            if (i % BITI_UNSIGNED_INT == (BITI_UNSIGNED_INT - 1)) {
+                k++;
+            } else {
+                inturi_control[k] >>= 1;
+            }
+
+            if (nr_biti_data_anterioara != 0 && int_corupt == 1) {
+                corupt[j - 1] = 1;
+            }
+
+            unsigned int nr_biti_neprelucrati = BITI_UNSIGNED_INT - nr_biti_data_anterioara;
+
+            while (nr_biti_neprelucrati >= BITI_DATA && j < N) {
                 data_extrasa = (inturi[i] >> nr_biti_data_anterioara) & mask_data;
 
                 extrage_data(data_extrasa, data, j);
 
-                biti_neprelucrati -= BITI_DATA;
+                nr_biti_neprelucrati -= BITI_DATA;
+                nr_biti_data_anterioara += BITI_DATA;
 
-                while (data_extrasa != 0) {
-                    if ((data_extrasa & 1) == 1) {
-                        biti_1[j]++;
-                    }
-
-                    data_extrasa >>= 1;
+                if (nr_biti_data_anterioara == BITI_UNSIGNED_INT) {
+                    nr_biti_data_anterioara = 0;
                 }
 
-                if (j < N - 1)    
-                    j++;
-            }
-
-            nr_biti_data_anterioara = BITI_UNSIGNED_INT - biti_neprelucrati;
-            unsigned int data_incompleta = (inturi[i] >> (BITI_UNSIGNED_INT - biti_neprelucrati));
-
-            unsigned int putere_2 = 1, mask_data_incompleta = 0;
-            for (k = 1; k <= nr_biti_data_anterioara; k++) {
-                   putere_2 *= 2;
-                   mask_data_incompleta += putere_2;
-            }
-
-            if (i < inturi_necesare -1)
-                data_extrasa = data_incompleta + ((inturi[i + 1] & mask_data_incompleta) << biti_neprelucrati);
-            else
-                data_extrasa = data_incompleta;
-
-            extrage_data(data_extrasa, data, j);
-
-            while (data_extrasa != 0) {
-                if ((data_extrasa & 1) == 1) {
-                    biti_1[j]++;
+                if (int_corupt == 1) {
+                    corupt[j] = 1;
                 }
 
-                data_extrasa >>= 1;
+                j++;
             }
 
-            j++;
+            if (nr_biti_neprelucrati > 0 && i < inturi_necesare - 1) {  // exita cativa biti dintr-o alta data
+                // merg cu i pana la inturi_necesare - 1 pt ca ulterior o sa folosesc elementul de pe poz i + 1
+                // din inturi si trebuie sa ma asigur ca acesta exista si ca nu depasesc memoria alocata
+
+                unsigned int mask_data_incompleta1 = (1 << nr_biti_neprelucrati) - 1;
+                unsigned int data_incompleta1 = ((inturi[i] >> nr_biti_data_anterioara) & mask_data_incompleta1);
+
+                nr_biti_data_anterioara = BITI_DATA - nr_biti_neprelucrati;
+                unsigned int mask_data_incompleta2 = (1 << nr_biti_data_anterioara) - 1;
+                unsigned int data_incompleta2 = inturi[i + 1] & mask_data_incompleta2;
+
+                data_extrasa = (data_incompleta1 + (data_incompleta2 << nr_biti_neprelucrati));
+
+                extrage_data(data_extrasa, data, j);
+
+                if (int_corupt == 1) {
+                    corupt[j] = 1;
+                }
+
+                j++;
+
+            } else {  // toate datele prelucrate sunt complete, urmatoarea data incepe in urmatorul unsigned int
+                nr_biti_data_anterioara = 0;
+            }
         }
 
-        // vezi daca ai extras bine datele (in principal prima si ultima)
-
-        // verific bitii de control:
-        j = 0;
-        unsigned int biti_control = inturi_control[j];
+        int nr_date_necorupte = 0;
 
         for (i = 0; i < N; i++) {
-            if (biti_1[i] % 2 != (inturi_control[j] & 1)) {
-                for (k = i; k < N - 1; k++) {
-                    data[k] = data[k + 1];
+            if (corupt[i] == 1) {
+                for (j = i; j < N - 1; j++) {
+                    data[j] = data[j + 1];
                 }
-
-                N--;
-                i--;
-            }
-
-            biti_control >>= 1;
-
-            if (biti_control == 0 && j < inturi_control_necesare - 1) {
-                j++;
-                biti_control = inturi_control[j];
+            } else {
+                nr_date_necorupte++;
             }
         }
 
-        sortare_date(N, data);
-        
-        afisare_data(N, data, luna);
+        qsort(data, nr_date_necorupte, sizeof(TDate), comparare_date);
+        afisare_date(nr_date_necorupte, data, luna);
 
         free(inturi);
         free(inturi_control);
-        free(biti_1);
         free(data);
-
-    } else {
-        printf("Numar task invalid");
+        free(corupt);
     }
-	
+
     return 0;
 }

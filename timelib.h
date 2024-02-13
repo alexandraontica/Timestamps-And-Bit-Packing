@@ -1,7 +1,8 @@
 #ifndef TIMELIB_H_INCLUDED
 #define TIMELIB_H_INCLUDED
 
-#define MONTHS_IN_A_YEAR 12  // am pus aici constantele de care am nevoie si in bitpacking.c
+#define SEC_IN_AN_HOUR 3600  // am pus aici constantele de care am nevoie si in bitpacking.c si planner.c
+#define MONTHS_IN_A_YEAR 12
 #define MAX_LITERE_IN_LUNA 10
 #define IANUARIE 1
 #define FEBRUARIE 2
@@ -17,6 +18,8 @@
 #define DECEMBRIE 12
 #define START_YEAR 1970
 
+#define MAX_NAME 5
+
 typedef struct {
     unsigned char hour;
     unsigned char min;
@@ -30,7 +33,7 @@ typedef struct {
 } TDate;
 
 typedef struct {
-    char name[5];
+    char name[MAX_NAME];  // am modificat aici pt ca aveam eroare de coding style (5 era magic number)
     signed char utc_hour_difference;
 } TTimezone;
 

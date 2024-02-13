@@ -4,7 +4,7 @@ Task 1:
 Prin operatiile % elimin pentru fiecare variabila in parte unitatile de timp mai mari decat aceasta.
 Mai exact, pentru secunde imi ramane un numar din intervalul [0, 59]; elimin, asadar, minutele, orele etc. din total.
 Pentru minute, imi ramane un numar de secunde din intervalul [0, 3599]; elimin , deci, orele, zilele etc. din total. Rezultatul il 
-impart la numarul de secunde dintr-un minut pentru a calcula cate minute am.
+impart (impartire intreaga) la numarul de secunde dintr-un minut pentru a calcula cate minute am.
 La fel, pentru numarul de ore elimin zilele din total si impart la numarul de secunde dintr-o ora.
 
 Taskurile 2 si 3:
@@ -28,8 +28,34 @@ Mi-am creat un vector de siruri de caractere cu toate lunile anului ca sa-mi fie
 afisarea in formatul cerut.
 
 Task 7:
-Pentru a extrage ziua, luna si anul din fiecare data citita in formatul dat m-am folosit de niste masti care aveau bitii de 1 pe 
-pozitiile pe care in numar/data se afla ce cautam (ziua/luna/anul). Am salvat datele intr-un vector de tip TDate pe care l-am sortat si 
-afisat.
+Pentru a extrage ziua, luna si anul din fiecare data citita in formatul dat m-am folosit de niste masti care aveau bitii de 1 pe pozitiile pe care 
+in numar/data se afla ce cautam (ziua/luna/anul) în funcția extrage_data. Am salvat datele intr-un vector de tip TDate pe care l-am sortat afisat.
 
 Task 8:
+Am calculat numarul de unsigned int-uri necesare pentru stocarea datelor si numarul de unsigned int-uri cu biti de control. In vectorul corupt am 
+salvat pe parcursul programului 1 pe pozitia i daca data de pe pozitia i era total sau partial (doar o parte din biti) intr-un unsigned int corupt 
+si 0 in caz contrar. 
+Am parcurs vectorul de unsigned int-uri ce stocheaza date. Pentru fiecare in parte am calculat numarul de biti de 1 pentru a verifica ulterior 
+daca acesta este corupt sau nu. Daca e corupt si contine biti dintr-o data a carei stocare a inceput in int-ul anterior, marchez data respectiva 
+ca fiind dintr-un int corupt. Am extras apoi pe rand bitii datelor complete din int si, folosindu-ma de functia extrage_data implementata la 
+taskul anterior, am extras data din acesti biti. Apoi, cu bitii ramasi nefolositi din int-ul curent si cu numarul necesar de biti pentru a crea o 
+data din int-ul urmator am construit, folosindu-ma de niste masti, stocarea pe biti a datei urmatoare, pe care am extras-o (am determinat intai prima parte a datei din int-ul curent, apoi cea de-a doua parte din int-ul urmator, am shiftat la stanga partea a doua cu un numar de biti egal cu 
+cel al primei parti si, in final, am adunat cele doua parti). 
+Am sters, apoi, datele din int-uri corupte din vector si le-am numarat pe cele bune. Am sortat vectorul de date si apoi l-am afisat.
+
+Task 9:
+Dupa ce am citit datele de intrare am aprcurs fiecare interval disponibil al fiecarei persoane, verificand daca durata sa este cel putin egala cu 
+cea a evenimentului. In caz afirmativ, daca nu am mai gasit niciun alt interval inainte, il adaug la vectorul de intervale posibile. Daca, in
+schimb, exista si alte intervale adaugate anterior, verific daca intervalul curent exista deja. Daca da, adaug persoana al carei interval este cel
+curent ca participant. Daca intervalul curent nu exista, dar persoana este totusi disponibila in alt interval deja existent (perioada de 
+disponibilitate a ei incepe inainte de un interval si se termina odata cu acesta sau dupa aceea), adaug persoana ca participant in cadrul acestui
+interval, dar adaug si intervalul curent ca nou interval in vector. Daca intervalul curent nu exista deja, il adaug apoi in vectorul de intervale
+posibile.
+Pentru adaugarea unui interval in vector sau a unei persoane ca participant am scris functii separate care (re)aloca toti pointerii necesari 
+(verificand daca a fost posibila si s-a realizat alocarea, la fel ca in cazul tuturor pointerilor alocati dinamic din tema) si populeaza 
+campurile. 
+Pentru a simplifica compararea momentelor de inceput si final a intervalelor, le-am transformat pe acestea in timestamp-uri ca sa nu mai tin cont
+de fusul orar.
+La final, am sortat vectorul de intervale posibile pentru eveniment dupa timestamp, iar primul interval gasit cu numar suficient de participanti
+este cel cautat. In cazul in care intervalul a fost gasit, am sortat vectorul de persoane dupa nume ca sa pot sa afisez participantii in formatul
+cerut in ordine alfabetica.
