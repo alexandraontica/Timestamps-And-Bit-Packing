@@ -39,7 +39,8 @@ Am parcurs vectorul de unsigned int-uri ce stocheaza date. Pentru fiecare in par
 daca acesta este corupt sau nu. Daca e corupt si contine biti dintr-o data a carei stocare a inceput in int-ul anterior, marchez data respectiva 
 ca fiind dintr-un int corupt. Am extras apoi pe rand bitii datelor complete din int si, folosindu-ma de functia extrage_data implementata la 
 taskul anterior, am extras data din acesti biti. Apoi, cu bitii ramasi nefolositi din int-ul curent si cu numarul necesar de biti pentru a crea o 
-data din int-ul urmator am construit, folosindu-ma de niste masti, stocarea pe biti a datei urmatoare, pe care am extras-o (am determinat intai prima parte a datei din int-ul curent, apoi cea de-a doua parte din int-ul urmator, am shiftat la stanga partea a doua cu un numar de biti egal cu 
+data din int-ul urmator am construit, folosindu-ma de niste masti, stocarea pe biti a datei urmatoare, pe care am extras-o (am determinat intai 
+prima parte a datei din int-ul curent, apoi cea de-a doua parte din int-ul urmator, am shiftat la stanga partea a doua cu un numar de biti egal cu 
 cel al primei parti si, in final, am adunat cele doua parti). 
 Am sters, apoi, datele din int-uri corupte din vector si le-am numarat pe cele bune. Am sortat vectorul de date si apoi l-am afisat.
 
