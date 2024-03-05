@@ -43,20 +43,3 @@ data din int-ul urmator am construit, folosindu-ma de niste masti, stocarea pe b
 prima parte a datei din int-ul curent, apoi cea de-a doua parte din int-ul urmator, am shiftat la stanga partea a doua cu un numar de biti egal cu 
 cel al primei parti si, in final, am adunat cele doua parti). 
 Am sters, apoi, datele din int-uri corupte din vector si le-am numarat pe cele bune. Am sortat vectorul de date si apoi l-am afisat.
-
-Task 9:
-Dupa ce am citit datele de intrare am aprcurs fiecare interval disponibil al fiecarei persoane, verificand daca durata sa este cel putin egala cu 
-cea a evenimentului. In caz afirmativ, daca nu am mai gasit niciun alt interval inainte, il adaug la vectorul de intervale posibile. Daca, in
-schimb, exista si alte intervale adaugate anterior, verific daca intervalul curent exista deja. Daca da, adaug persoana al carei interval este cel
-curent ca participant. Daca intervalul curent nu exista, dar persoana este totusi disponibila in alt interval deja existent (perioada de 
-disponibilitate a ei incepe inainte de un interval si se termina odata cu acesta sau dupa aceea), adaug persoana ca participant in cadrul acestui
-interval, dar adaug si intervalul curent ca nou interval in vector. Daca intervalul curent nu exista deja, il adaug apoi in vectorul de intervale
-posibile.
-Pentru adaugarea unui interval in vector sau a unei persoane ca participant am scris functii separate care (re)aloca toti pointerii necesari 
-(verificand daca a fost posibila si s-a realizat alocarea, la fel ca in cazul tuturor pointerilor alocati dinamic din tema) si populeaza 
-campurile. 
-Pentru a simplifica compararea momentelor de inceput si final a intervalelor, le-am transformat pe acestea in timestamp-uri ca sa nu mai tin cont
-de fusul orar.
-La final, am sortat vectorul de intervale posibile pentru eveniment dupa timestamp, iar primul interval gasit cu numar suficient de participanti
-este cel cautat. In cazul in care intervalul a fost gasit, am sortat vectorul de persoane dupa nume ca sa pot sa afisez participantii in formatul
-cerut in ordine alfabetica.
